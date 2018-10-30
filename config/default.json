@@ -1,0 +1,3 @@
+{
+  "script": "yarn babel-node ./src/task.js"
+}
