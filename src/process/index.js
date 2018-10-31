@@ -10,4 +10,3 @@ async function main() {
 main().catch(err => {
   debug(err)
 })
-

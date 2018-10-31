@@ -19,6 +19,7 @@ export const setup = () => {
       debug('Error connecting to pm2 deamon')
       process.exit(2)
     }
+    debug(`Starting ${config.script}`)
     start(pm2, {
       script: config.script
     })
