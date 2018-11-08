@@ -140,6 +140,7 @@ class PM2 {
    */
   static launchBus (callback) {
     pm2.launchBus((err, bus) => {
+      this.disconnect()
       if (err) {
         debug('Error launching bus', err)
       }

@@ -26,6 +26,15 @@ const pm2flush = async () => {
 const pm2nuke = async () => {
   PM2.connect(() => PM2.nuke())
 }
+const pm2launchBus = async () => {
+  const busTest = (bus) => {
+    debug('Testing bus', bus)
+  }
+  PM2.connect(() => PM2.launchBus(busTest))
+}
+const pm2signal = async () => {
+  PM2.connect(() => PM2.sendSignal(config.name, 'This is a signal'))
+}
 
 export const pm2Flow = async (action) => {
   switch (action) {
@@ -50,6 +59,12 @@ export const pm2Flow = async (action) => {
     case 'killall':
     case 'nuke':
       await pm2nuke()
+      break
+    case 'bus':
+      await pm2launchBus()
+      break
+    case 'signal':
+      await pm2signal()
       break
     default:
       debug('Unknown action', action)

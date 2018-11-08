@@ -9,4 +9,14 @@ async function main() {
   }
 }
 
+process.on('message', (packet) => {
+  debug('Message', packet)
+  process.send({
+    type: 'process:msg',
+    data: {
+     success: true
+    }
+ })
+})
+
 main()
