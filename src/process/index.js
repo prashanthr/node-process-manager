@@ -4,7 +4,9 @@ import _debug from 'debug'
 const debug = _debug('main')
 
 async function main() {
-  pm2Flow()
+  const argv = process.argv
+  const action = argv[2]
+  pm2Flow(action)
 }
 
 main().catch(err => {

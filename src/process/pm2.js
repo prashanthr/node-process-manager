@@ -46,7 +46,22 @@ class PM2 {
     })
   }
   /**
-   * 
+   * Restarts an app
+   * @param {*} app 'app' or 1 or 'all'
+   */
+  static restart (app) {
+    pm2.restart(app, (err, result) => {
+      this.disconnect()
+      if (err) {
+        debug('Error restarting pm2 app', err)
+        throw err
+      }
+      debug('Restarted app successfully')
+    })
+  }
+
+  /**
+   * Kills an app
    * @param {*} app 'app' or 1 or 'all'
    */
   static kill (app) {
@@ -61,8 +76,15 @@ class PM2 {
     })
   }
 
+  /**
+   * Lists all pm2 processes
+   *
+   * @static
+   * @memberof PM2
+   */
   static list () {
     pm2.list((err, apps) => {
+      this.disconnect()
       if (err) {
         debug('Error listing instances')
       } 
@@ -71,11 +93,12 @@ class PM2 {
   }
 
   /**
-   * 
+   * Describes an app
    * @param {*} app 'app' or 1 or 'all'
    */
   static describe (app) {
     pm2.describe(app, (err, app) => {
+      this.disconnect()
       if (err) {
         debug('Error describing app')
       } else {
@@ -90,6 +113,7 @@ class PM2 {
    */
   static flush (app) {
     pm2.flush(app, (err, result) => {
+      this.disconnect()
       if (err) {
         debug('Error flushing process')
       }
@@ -106,11 +130,12 @@ class PM2 {
         debug('Error killing pm2 deamon', err)
       } else {
         debug('Killed PM2 deamon')
+        process.exit(0)
       }
     })
   }
   /**
-   * 
+   * Launches a bus
    * @param {func} callback to execute with bus object
    */
   static launchBus (callback) {
