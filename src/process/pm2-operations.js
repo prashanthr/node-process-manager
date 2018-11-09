@@ -33,7 +33,17 @@ const pm2launchBus = async () => {
   PM2.connect(() => PM2.launchBus(busTest))
 }
 const pm2signal = async () => {
-  PM2.connect(() => PM2.sendSignal(config.name, 'This is a signal'))
+  PM2.connect(() => PM2.sendSignal(config.name, config.signal))
+}
+const pm2interrupt = async () => {
+  PM2.connect(() => {
+    PM2.describe(config.name, (apps) => {
+      const pid = apps && apps[0].pm_id
+      const params = { ...config.interruptData, id: pid }
+      debug('Params', params)
+      PM2.interrupt(pid, params)
+    })
+  })
 }
 
 export const pm2Flow = async (action) => {
@@ -65,6 +75,9 @@ export const pm2Flow = async (action) => {
       break
     case 'signal':
       await pm2signal()
+      break
+    case 'interrupt':
+      await pm2interrupt()
       break
     default:
       debug('Unknown action', action)

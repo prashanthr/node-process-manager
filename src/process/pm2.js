@@ -96,13 +96,18 @@ class PM2 {
    * Describes an app
    * @param {*} app 'app' or 1 or 'all'
    */
-  static describe (app) {
+  static describe (app, callback) {
     pm2.describe(app, (err, app) => {
-      this.disconnect()
       if (err) {
         debug('Error describing app')
       } else {
         debug('App info', app)
+        if (callback) {
+          callback(app)
+        } else {
+          this.disconnect()
+          return app
+        }
       }
     })
   }
@@ -161,6 +166,16 @@ class PM2 {
         debug('Error sending signal to app', err)
       }
       debug('Sent signal to app', result)
+    })
+  }
+
+  static interrupt (pid, data) {
+    pm2.sendDataToProcessId(pid, data, (err, result) => {
+      this.disconnect()
+      if (err) {
+        debug('Error sending data to process id', err)
+      }
+      debug('Sent data to process id', result)
     })
   }
 }

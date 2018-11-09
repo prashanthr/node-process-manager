@@ -1,6 +1,14 @@
 {
   "script": "./src/process/task.sh",
   "name": "task",
-  "args": ""
+  "args": "",
   // "instances": "1"
+  "signal": "SIGINT",
+  "interruptData": {
+    "type": "process:msg",
+    "topic": "interrupt",
+    "data": {
+      "foo": "bar"
+    }
+  } 
 }
