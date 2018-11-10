@@ -1,8 +1,14 @@
 {
-  "script": "./src/process/task.sh",
-  "name": "task",
-  "args": "",
-  // "instances": "1"
+  "task": {
+    "script": "./src/process/task.sh",
+    "name": "task",
+    "args": "",
+    // "instances": "4",
+    // "exec_mode": "cluster"
+  },
+  "server": {
+    "port": 7070
+  },
   "signal": "SIGINT",
   "interruptData": {
     "type": "process:msg",

@@ -6,22 +6,22 @@ import { delay } from 'lodash'
 const debug = _debug('pm2-operations')
 
 const pm2start = async () => {
-  PM2.connect(() => PM2.start(config))
+  PM2.connect(() => PM2.start(config.task))
 }
 const pm2restart = async () => {
-  PM2.connect(() => PM2.restart(config.name))
+  PM2.connect(() => PM2.restart(config.task.name))
 }
 const pm2stop = async () => {
-  PM2.connect(() => PM2.kill(config.name))
+  PM2.connect(() => PM2.kill(config.task.name))
 }
 const pm2list = async () => {
   PM2.connect(() => PM2.list())
 }
 const pm2describe = async () => {
-  PM2.connect(() => PM2.describe(config.name))
+  PM2.connect(() => PM2.describe(config.task.name))
 }
 const pm2flush = async () => {
-  PM2.connect(() => PM2.flush(config.name))
+  PM2.connect(() => PM2.flush(config.task.name))
 }
 const pm2nuke = async () => {
   PM2.connect(() => PM2.nuke())
@@ -33,11 +33,11 @@ const pm2launchBus = async () => {
   PM2.connect(() => PM2.launchBus(busTest))
 }
 const pm2signal = async () => {
-  PM2.connect(() => PM2.sendSignal(config.name, config.signal))
+  PM2.connect(() => PM2.sendSignal(config.task.name, config.signal))
 }
 const pm2interrupt = async () => {
   PM2.connect(() => {
-    PM2.describe(config.name, (apps) => {
+    PM2.describe(config.task.name, (apps) => {
       const pid = apps && apps[0].pm_id
       const params = { ...config.interruptData, id: pid }
       debug('Params', params)

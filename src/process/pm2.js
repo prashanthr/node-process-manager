@@ -35,21 +35,41 @@ class PM2 {
    * Starts an app
    * @param {*} opts { script, jsonConfigFile, errback }
    */
-  static start (opts) {
+  static start (opts, callback) {
+    debug('Starting with config:', opts)
     pm2.start(opts, (err, apps) => {
-      this.disconnect()
       if (err) {
         debug('Error starting pm2 app(s)', err)
         throw err
       }
       debug('Started app successfully!')
+      if (callback) {
+        callback(apps)
+      } else {
+        this.disconnect()
+      }
+    })
+  }
+  static start2 (script, opts, callback) {
+    debug('Starting with config:', opts)
+    pm2.start(script, opts, (err, apps) => {
+      if (err) {
+        debug('Error starting pm2 app(s)', err)
+        throw err
+      }
+      debug('Started app successfully!')
+      if (callback) {
+        callback(apps)
+      } else {
+        this.disconnect()
+      }
     })
   }
   /**
    * Restarts an app
    * @param {*} app 'app' or 1 or 'all'
    */
-  static restart (app) {
+  static restart (app, callback) {
     pm2.restart(app, (err, result) => {
       this.disconnect()
       if (err) {
@@ -57,6 +77,9 @@ class PM2 {
         throw err
       }
       debug('Restarted app successfully')
+      if (callback) {
+        callback(result)
+      }
     })
   }
 
@@ -64,14 +87,16 @@ class PM2 {
    * Kills an app
    * @param {*} app 'app' or 1 or 'all'
    */
-  static kill (app) {
+  static kill (app, callback) {
     pm2.stop(app, (err, result) => {
       this.disconnect()
       if (err) {
         debug('Error killing pm2 app')
       } else {
         debug('Successfully killed app', result)
-        
+        if (callback) {
+          callback(result)
+        }
       }
     })
   }
@@ -82,13 +107,18 @@ class PM2 {
    * @static
    * @memberof PM2
    */
-  static list () {
+  static list (callback) {
     pm2.list((err, apps) => {
       this.disconnect()
       if (err) {
         debug('Error listing instances')
       } 
       debug('App(s) info', apps)
+      if (callback) {
+        callback(apps)
+      } else {
+        return apps
+      }
     })
   }
 
@@ -153,6 +183,7 @@ class PM2 {
       callback(bus)
     })
   }
+
   /**
    * Sends a signal to an app
    *
